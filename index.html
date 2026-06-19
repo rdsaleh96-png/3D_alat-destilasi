@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif - Alat Destilasi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0f172a;       /* Slate 900 - Navy Gelap */
+            --primary-light: #1e293b; /* Slate 800 */
+            --accent: #0ea5e9;        /* Sky 500 - Sian Cerah */
+            --accent-hover: #38bdf8;  /* Sky 400 */
+            --bg-main: #f8fafc;       /* Slate 50 */
+            --text-dark: #0f172a;
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+            --success: #10b981;       /* Emerald 500 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container Rasio 16:9 Fix */
+        .app-container {
+            width: 1280px;
+            height: 720px;
+            background-color: var(--bg-main);
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* ==================== SCREEN COVER ==================== */
+        .screen-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 30%, rgba(14, 165, 233, 0.2)), 
+                        url('https://images.unsplash.com/photo-1532187863486-abf9d39d6618?auto=format&fit=crop&q=80&w=1280') center/cover no-repeat;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .screen-cover.hidden {
+            transform: translateY(-100%);
+        }
+
+        .cover-badge {
+            background-color: rgba(14, 165, 233, 0.15);
+            color: var(--accent-hover);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cover-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--text-light);
+            line-height: 1.1;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .cover-subtitle {
+            font-size: 22px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+
+        .cover-meta {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 24px 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            margin-bottom: 48px;
+        }
+
+        .cover-meta p {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+        .cover-meta p strong {
+            color: var(--text-light);
+        }
+        .cover-meta p:last-child { margin-bottom: 0; }
+
+        .btn-start {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--accent);
+            color: var(--text-light);
+            font-size: 18px;
+            font-weight: 600;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-start:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(14, 165, 233, 0.5);
+        }
+
+        /* ==================== SIDEBAR (NAVIGASI) ==================== */
+        .sidebar {
+            width: 320px;
+            height: 100%;
+            background-color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+            flex-shrink: 0;
+            z-index: 10;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .brand-section {
+            margin-bottom: 40px;
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-title i {
+            color: var(--accent);
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #94a3b8;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-light);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-btn.active {
+            color: var(--text-dark);
+            background-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+        }
+
+        .nav-btn.active i {
+            color: var(--text-dark);
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .author-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .author-school {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ==================== MAIN CONTENT AREA ==================== */
+        .main-content {
+            flex-grow: 1;
+            height: 100%;
+            position: relative;
+            background-color: var(--bg-main);
+        }
+
+        .page-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.98);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-content.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ------------------ HALAMAN 1: TUJUAN ------------------ */
+        .tujuan-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            flex-grow: 1;
+        }
+
+        .tujuan-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .tujuan-icon {
+            width: 48px;
+            height: 48px;
+            background-color: rgba(14, 165, 233, 0.08);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .tujuan-text h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .tujuan-text p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* ------------------ HALAMAN 2: MATERI ------------------ */
+        .materi-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            flex-grow: 1;
+            align-items: start;
+        }
+
+        .materi-text-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .materi-paragraph {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #334155;
+            text-align: justify;
+        }
+
+        .materi-highlight {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .materi-highlight h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 6px;
+        }
+
+        .materi-highlight ul {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .materi-highlight li {
+            font-size: 14px;
+            color: #0c4a6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .materi-highlight li i {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .materi-visual-panel {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            height: 100%;
+            min-height: 380px;
+            max-height: 480px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .materi-img {
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+        }
+
+        .materi-img-caption {
+            height: 15%;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ------------------ HALAMAN 3: SIMULASI (FULL EMBED) ------------------ */
+        .page-content.full-panel {
+            padding: 0;
+        }
+
+        .iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            background-color: #e2e8f0;
+            position: relative;
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ------------------ HALAMAN 4: EVALUASI ------------------ */
+        .quiz-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .quiz-progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            width: 20%; /* Berubah via JS */
+            background-color: var(--accent);
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-question-num {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .quiz-question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .quiz-options-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        .quiz-option-btn {
+            background-color: var(--bg-main);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option-btn:hover {
+            border-color: var(--accent);
+            background-color: #f0f9ff;
+        }
+
+        .quiz-option-btn.selected {
+            border-color: var(--accent);
+            background-color: rgba(14, 165, 233, 0.08);
+            font-weight: 600;
+            color: #0369a1;
+        }
+
+        .option-indicator {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option-btn.selected .option-indicator {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--text-light);
+        }
+
+        .quiz-actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-next:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* ------------------ HALAMAN RESULT / SKOR ------------------ */
+        .result-panel {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 20px;
+        }
+
+        .result-icon {
+            font-size: 64px;
+            color: var(--success);
+            background-color: rgba(16, 185, 129, 0.1);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .result-score {
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+
+        .ar-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            height: calc(100% - 120px);
+            padding: 40px;
+        }
+
+        .ar-preview {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            min-height: 480px;
+        }
+
+        .ar-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .ar-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        }
+
+        .ar-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+        }
+
+        .ar-panel h3 {
+            font-size: 22px;
+            color: var(--text-dark);
+        }
+
+        .ar-panel p {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .ar-tips {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ar-tips li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .ar-tips i {
+            color: var(--success);
+        }
+
+        .btn-ar {
+            margin-top: auto;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s ease;
+        }
+
+        .btn-ar:hover {
+            background: var(--accent-hover);
+        }
+
+
+        .btn-reset {
+            background-color: var(--accent);
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- ==================== BANNER LAYAR SAMPUL / COVER ==================== -->
+        <div class="screen-cover" id="coverScreen">
+            <div class="cover-badge">Fase E / Kelas 10 SMA</div>
+            <h1 class="cover-title">ALAT DESTILASI</h1>
+            <p class="cover-subtitle">Media Pembelajaran Interaktif Kimia Digital</p>
+            
+            <div class="cover-meta">
+                <p>Penyusun: <strong>Rita Nurhayati, S.Pd.</strong></p>
+                <p>Instansi: <strong>SMAN 1 Tasikmalaya</strong></p>
+            </div>
+
+            <button class="btn-start" onclick="startApp()">
+                Mulai Pembelajaran <i class="fa-solid fa-circle-play"></i>
+            </button>
+        </div>
+
+        <!-- ==================== SIDEBAR UTAMA (KIRI) ==================== -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-title">
+                    <i class="fa-solid fa-flask-vial"></i>
+                    <span>DESTILASI APP</span>
+                </div>
+                <div class="brand-subtitle">Kimia Interaktif • Kelas X</div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="switchPage('tujuan', this)">
+                    <i class="fa-solid fa-bullseye"></i> Tujuan Pembelajaran
+                </button>
+                <button class="nav-btn" onclick="switchPage('materi', this)">
+                    <i class="fa-solid fa-book-open"></i> Uraian Materi
+                </button>
+                <button class="nav-btn" onclick="switchPage('simulasi', this)">
+                    <i class="fa-solid fa-cube"></i> Simulasi 3D / AR
+                </button>
+                <button class="nav-btn" onclick="switchPage('evaluasi', this)">
+                    <i class="fa-solid fa-clipboard-question"></i> Evaluasi Soal
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="author-info">
+                    <div class="author-avatar">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <div class="author-name">Rita Nurhayati</div>
+                        <div class="author-school">SMAN 1 Tasikmalaya</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==================== KONTEN UTAMA (KANAN) ==================== -->
+        <main class="main-content">
+
+            <!-- 1. HALAMAN TUJUAN PEMBELAJARAN -->
+            <div id="page-tujuan" class="page-content active">
+                <div class="page-header">
+                    <h2 class="page-title">Tujuan Pembelajaran</h2>
+                    <p class="page-subtitle">Kompetensi yang harus dicapai setelah menyelesaikan modul interaktif ini</p>
+                </div>
+                
+                <div class="tujuan-grid">
+                    <div class="tujuan-card">
+                        <div class="tujuan-icon"><i class="fa-solid fa-gears"></i></div>
+                        <div class="tujuan-text">
+                            <h3>Memahami Prinsip Dasar</h3>
+                            <p>Peserta didik mampu menjelaskan konsep dasar pemisahan campuran zat cair melalui metode destilasi berdasarkan perbedaan volatilitas dan titik didih secara tepat.</p>
+                        </div>
+                    </div>
+                    <div class="tujuan-card">
+                        <div class="tujuan-icon"><i class="fa-solid fa-fill-drip"></i></div>
+                        <div class="tujuan-text">
+                            <h3>Identifikasi Komponen Rangkaian</h3>
+                            <p>Peserta didik dapat mengidentifikasi setiap komponen utama dalam satu set alat destilasi serta mendeskripsikan peranan fungsionalnya masing-masing.</p>
+                        </div>
+                    </div>
+                    <div class="tujuan-card">
+                        <div class="tujuan-icon"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                        <div class="tujuan-text">
+                            <h3>Menganalisis Transisi Fase</h3>
+                            <p>Peserta didik dapat menganalisis fenomena perubahan wujud zat, mulai dari penguapan saat pemanasan hingga pengembunan kembali di dalam kondensor.</p>
+                        </div>
+                    </div>
+                    <div class="tujuan-card">
+                        <div class="tujuan-icon"><i class="fa-solid fa-industry"></i></div>
+                        <div class="tujuan-text">
+                            <h3>Kontekstualisasi Aplikasi</h3>
+                            <p>Peserta didik mampu mengaitkan pemanfaatan metode destilasi dalam skala industri nyata, seperti pemisahan fraksi minyak bumi atau penyulingan minyak atsiri.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. HALAMAN URAIAN MATERI -->
+            <div id="page-materi" class="page-content">
+                <div class="page-header">
+                    <h2 class="page-title">Uraian Materi: Prinsip Destilasi</h2>
+                    <p class="page-subtitle">Pelajari dasar teori sebelum memulai penjelajahan simulasi 3D</p>
+                </div>
+
+                <div class="materi-layout">
+                    <div class="materi-text-panel">
+                        <p class="materi-paragraph">
+                            <strong>Destilasi atau penyulingan</strong> merupakan sebuah metode pemisahan zat kimia yang didasarkan pada perbedaan kecepatan atau kemudahan menguap (volatilitas) antar komponen dalam campuran liquid. Secara umum, proses fisika ini diaplikasikan untuk memisahkan zat cair dari campurannya, atau memurnikan cairan dari kontaminan padat maupun cair yang memiliki perbedaan titik didih signifikan.
+                        </p>
+                        <p class="materi-paragraph">
+                            Ketika campuran dipanaskan di dalam labu destilasi, suhu larutan akan meningkat secara bertahap. Komponen zat yang memiliki <strong>titik didih lebih rendah</strong> (lebih volatil) akan mencapai ambang penguapan terlebih dahulu. Uap tersebut bergerak naik menuju pipa penghubung, lalu dipaksa masuk ke dalam komponen pendingin yang bernama kondensor (Pendingin Liebig).
+                        </p>
+                        <div class="materi-highlight">
+                            <h4>3 Tahapan Siklus Utama Destilasi:</h4>
+                            <ul>
+                                <li><i class="fa-solid fa-fire"></i> <span><strong>Evaporasi (Penguapan):</strong> Mengubah fase cair menjadi fase gas lewat pemanasan terkontrol.</span></li>
+                                <li><i class="fa-solid fa-snowflake"></i> <span><strong>Kondensasi (Pengembunan):</strong> Mendinginkan gas di kondensor agar kembali menjadi cair.</span></li>
+                                <li><i class="fa-solid fa-wine-glass-empty"></i> <span><strong>Koleksi (Penampungan):</strong> Menampung tetesan murni cairan destilat ke Erlenmeyer.</span></li>
+                            </ul>
+                        </div>
+                        <p class="materi-paragraph">
+                            Penerapan destilasi sederhana ini mensyaratkan perbedaan titik didih yang cukup besar antar komponen (minimal berkisar 20°C). Jika rentang titik didihnya terlalu dekat, diperlukan metode bertingkat yang dinamakan destilasi fraksionasi, seperti yang digunakan pada industri pengolahan minyak bumi.
+                        </p>
+                    </div>
+
+                    <div class="materi-visual-panel">
+                        <img src="https://images.unsplash.com/photo-1617155093730-a8bf47be792d?auto=format&fit=crop&q=80&w=600" class="materi-img" alt="Laboratorium Kimia">
+                        <div class="materi-img-caption">
+                            <i class="fa-solid fa-circle-info" style="margin-right: 6px; color: var(--accent);"></i> Rangkaian aparatus destilasi dalam ruang praktikum kimia laboratorium.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. HALAMAN SIMULASI 3D/AR -->
+            <div id="page-simulasi" class="page-content">
+                <div class="page-header" style="padding:40px 40px 0 40px;">
+                    <h2 class="page-title">Simulasi 3D / Augmented Reality</h2>
+                    <p class="page-subtitle">
+                        Jelajahi model alat destilasi secara interaktif dan aktifkan mode AR melalui perangkat seluler.
+                    </p>
+                </div>
+
+                <div class="ar-container">
+                    <div class="ar-preview">
+                        <iframe
+                            src="https://asblr.com/AviLDy"
+                            allowfullscreen
+                            allow="camera; microphone; xr-spatial-tracking; gyroscope; accelerometer"
+                            referrerpolicy="origin"
+                            sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+                        </iframe>
+                    </div>
+
+                    <div class="ar-panel">
+                        <div class="ar-icon">
+                            <i class="fa-solid fa-cube"></i>
+                        </div>
+
+                        <h3>Mode Augmented Reality</h3>
+
+                        <p>
+                            Untuk pengalaman AR terbaik, buka simulasi menggunakan smartphone Android atau iPhone yang mendukung AR.
+                        </p>
+
+                        <ul class="ar-tips">
+                            <li><i class="fa-solid fa-check"></i> Gunakan browser Chrome atau Safari terbaru.</li>
+                            <li><i class="fa-solid fa-check"></i> Izinkan akses kamera saat diminta.</li>
+                            <li><i class="fa-solid fa-check"></i> Arahkan kamera ke permukaan datar.</li>
+                        </ul>
+
+                        <a href="https://asblr.com/AviLDy" target="_blank" class="btn-ar">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            Buka Mode AR
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. HALAMAN EVALUASI (5 SOAL PILIHAN GANDA) -->
+            <div id="page-evaluasi" class="page-content">
+                <div class="page-header">
+                    <h2 class="page-title">Evaluasi Pemahaman</h2>
+                    <p class="page-subtitle">Uji sejauh mana pemahamanmu mengenai instalasi dan mekanisme kerja alat destilasi</p>
+                </div>
+
+                <div class="quiz-wrapper" id="quizWrapper">
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quizProgress"></div>
+                    </div>
+
+                    <div class="quiz-card" id="quizCard">
+                        <!-- Konten pertanyaan dimasukkan secara dinamis via JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC INTERAKTIF ==================== -->
+    <script>
+        // 1. Fungsi Pembuka Cover Screen
+        function startApp() {
+            document.getElementById('coverScreen').classList.add('hidden');
+        }
+
+        // 2. Fungsi Alih Halaman (Navigasi Sidebar)
+        function switchPage(pageId, buttonElement) {
+            // Hapus kelas aktif dari semua halaman konten
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Aktifkan halaman tujuan
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Atur highlight status aktif pada tombol menu sidebar
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+        }
+
+        // 3. Bank Soal Evaluasi Data (5 Soal, Opsi A-E, 1 Benar)
+        const questions = [
+            {
+                q: "Metode pemisahan campuran zat cair melalui rangkaian alat destilasi didasarkan pada perbedaan properti fisik...",
+                options: [
+                    "Kelarutan zat di dalam pelarut tertentu",
+                    "Ukuran partikel absolut komponen campuran",
+                    "Titik didih atau tingkat volatilitas zat",
+                    "Massa jenis komponen saat suhu kamar",
+                    "Warna struktur kristal penyusun zat"
+                ],
+                correct: 2 // Opsi C
+            },
+            {
+                q: "Pada aparatus destilasi, komponen pendingin pipa silinder yang dirancang khusus untuk mengembunkan uap kembali menjadi zat cair adalah...",
+                options: [
+                    "Labu Alas Bulat / Destilasi",
+                    "Kondensor / Pendingin Liebig",
+                    "Termometer Alkohol / Raksa",
+                    "Pipa Adaptor Aliran Destilat",
+                    "Tabung Erlenmeyer Penampung"
+                ],
+                correct: 1 // Opsi B
+            },
+            {
+                q: "Bagaimanakah peletakan posisi ujung termometer yang paling akurat dalam sistem penataan alat destilasi?",
+                options: [
+                    "Terendam sepenuhnya di dasar cairan labu pemanas",
+                    "Menempel erat pada dinding kaca luar pipa kondensor",
+                    "Tepat sejajar dengan percabangan lubang uap menuju kondensor",
+                    "Berada di mulut tabung Erlenmeyer wadah destilat",
+                    "Digantung bebas tepat di tengah-tengah pipa jaket air masuk"
+                ],
+                correct: 2 // Opsi C
+            },
+            {
+                q: "Untuk memastikan pemisahan zat cair menggunakan teknik destilasi sederhana berjalan optimal, ambang perbedaan titik didih minimum ideal antar komponen adalah...",
+                options: [
+                    "Sekitar 1 °C s.d. 3 °C",
+                    "Kurang dari 5 °C",
+                    "Minimal berkisar 20 °C atau lebih",
+                    "Tepat pada suhu 10 °C",
+                    "Tidak berpengaruh asalkan volume sama"
+                ],
+                correct: 2 // Opsi C
+            },
+            {
+                q: "Aplikasi pengolahan berskala industri masif yang mengadopsi prinsip modifikasi destilasi fraksionasi (bertingkat) ditemukan pada...",
+                options: [
+                    "Proses pembuatan garam dapur dari air laut",
+                    "Pemisahan komponen fraksi-fraksi minyak bumi",
+                    "Pemurnian depot air minum isi ulang higienis",
+                    "Kristalisasi air nira kelapa menjadi gula merah",
+                    "Penyaringan pasir silika dari kerikil sungai"
+                ],
+                correct: 1 // Opsi B
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOptionIndex = null;
+
+        // 4. Fungsi Render Kuis
+        function renderQuiz() {
+            const quizCard = document.getElementById('quizCard');
+            const progressFill = document.getElementById('quizProgress');
+            
+            // Atur bar progress atas
+            const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+
+            if (currentQuestionIndex < questions.length) {
+                const currentData = questions[currentQuestionIndex];
+                selectedOptionIndex = null; // reset pilihan jawaban
+
+                let optionsHTML = '';
+                const alpha = ['A', 'B', 'C', 'D', 'E'];
+                
+                currentData.options.forEach((opt, idx) => {
+                    optionsHTML += `
+                        <button class="quiz-option-btn" onclick="selectOption(${idx})">
+                            <div class="option-indicator">${alpha[idx]}</div>
+                            <span>${opt}</span>
+                        </button>
+                    `;
+                });
+
+                quizCard.innerHTML = `
+                    <div class="quiz-question-num">Pertanyaan ${currentQuestionIndex + 1} dari ${questions.length}</div>
+                    <div class="quiz-question-text">${currentData.q}</div>
+                    <div class="quiz-options-container">
+                        ${optionsHTML}
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="btn-next" id="btnNextQuiz" onclick="nextQuestion()" style="opacity: 0.6; pointer-events: none;">
+                            ${currentQuestionIndex === questions.length - 1 ? 'Selesai' : 'Lanjut'} <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                // Tampilkan halaman nilai akhir jika semua soal terjawab
+                showResults();
+            }
+        }
+
+        // 5. Fungsi Memilih Jawaban
+        function selectOption(index) {
+            selectedOptionIndex = index;
+            const optionButtons = document.querySelectorAll('.quiz-option-btn');
+            
+            // Hapus status selected dari semua opsi
+            optionButtons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Tambahkan status selected ke opsi terpilih
+            optionButtons[index].classList.add('selected');
+
+            // Aktifkan tombol Lanjut / Selesai
+            const btnNext = document.getElementById('btnNextQuiz');
+            btnNext.style.opacity = "1";
+            btnNext.style.pointerEvents = "auto";
+        }
+
+        // 6. Fungsi Pindah Soal
+        function nextQuestion() {
+            if (selectedOptionIndex === null) return;
+
+            // Cek kebenaran jawaban
+            if (selectedOptionIndex === questions[currentQuestionIndex].correct) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            renderQuiz();
+        }
+
+        // 7. Tampilkan Hasil Skor Akhir
+        function showResults() {
+            const quizWrapper = document.getElementById('quizWrapper');
+            const finalScoreValue = Math.round((score / questions.length) * 100);
+            
+            quizWrapper.innerHTML = `
+                <div class="result-panel">
+                    <div class="result-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h2>Evaluasi Selesai!</h2>
+                    <p style="color: var(--text-muted); font-size:15px;">Kamu telah menyelesaikan seluruh instrumen soal uji.</p>
+                    <div class="result-score">Skor: ${finalScoreValue} / 100</div>
+                    <p style="font-size:14px; max-width:400px; line-height:1.5; color:#475569;">
+                        ${finalScoreValue >= 75 ? 'Luar biasa! Kamu telah menguasai kompetensi pemahaman struktur susunan dan tata operasional sistem alat destilasi dengan sangat baik.' : 'Ulasan kembali materi teori serta visualisasi model 3D interaktif di atas untuk lebih menyempurnakan pemahaman mekanismemu.'}
+                    </p>
+                    <button class="btn-reset" onclick="resetQuiz()">
+                        <i class="fa-solid fa-rotate-right"></i> Ulangi Tes Evaluasi
+                    </button>
+                </div>
+            `;
+        }
+
+        // 8. Reset Ulang Kuis
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            const quizWrapper = document.getElementById('quizWrapper');
+            quizWrapper.innerHTML = `
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgress"></div>
+                </div>
+                <div class="quiz-card" id="quizCard"></div>
+            `;
+            
+            renderQuiz();
+        }
+
+        // Inisialisasi kuis saat dokumen pertama kali dimuat
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
